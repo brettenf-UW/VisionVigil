@@ -156,9 +156,6 @@ To extend VisionVigil with new features:
 ### Browser Compatibility
 The application uses modern JavaScript features and should work in all recent browsers.
 
-## License
-[Add your license information here]
-
 ## Acknowledgements
 - Powered by OpenAI API
 - Built as part of a Generative AI course project
