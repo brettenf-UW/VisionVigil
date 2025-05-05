@@ -291,137 +291,250 @@ document.addEventListener('DOMContentLoaded', () => {
     const container = document.getElementById('csv-results-container');
     container.innerHTML = '';
     
-    // Create summary card
-    const summaryCard = document.createElement('div');
-    summaryCard.className = 'card results-card';
+    // Create dashboard container
+    const dashboardContainer = document.createElement('div');
+    dashboardContainer.className = 'dashboard-container';
     
-    const summaryHeader = document.createElement('h2');
-    summaryHeader.textContent = 'Decision Analysis Summary';
-    summaryCard.appendChild(summaryHeader);
+    // Create summary stats cards
+    const statsContainer = document.createElement('div');
+    statsContainer.className = 'stats-container';
+    
+    // Total decisions card
+    const totalDecisionsCard = createStatCard(
+      'Total Decisions', 
+      results.summary.total_decisions,
+      'analytics',
+      'stat-neutral'
+    );
+    statsContainer.appendChild(totalDecisionsCard);
+    
+    // Flagged decisions card
+    const flaggedDecisionsCard = createStatCard(
+      'Excessive Pivots', 
+      results.summary.flagged_count,
+      'warning',
+      'stat-high'
+    );
+    statsContainer.appendChild(flaggedDecisionsCard);
+    
+    // Conflicts card
+    const conflictsCard = createStatCard(
+      'Conflicts', 
+      results.summary.conflict_count,
+      'error',
+      'stat-high'
+    );
+    statsContainer.appendChild(conflictsCard);
+    
+    dashboardContainer.appendChild(statsContainer);
+    container.appendChild(dashboardContainer);
+    
+    // Create assessment card
+    const assessmentCard = document.createElement('div');
+    assessmentCard.className = 'card assessment-card';
+    
+    const assessmentHeader = document.createElement('div');
+    assessmentHeader.className = 'assessment-header';
+    
+    const headerIcon = document.createElement('span');
+    headerIcon.className = 'material-icons';
+    headerIcon.textContent = 'insights';
+    assessmentHeader.appendChild(headerIcon);
+    
+    const headerText = document.createElement('h2');
+    headerText.textContent = 'Executive Summary';
+    assessmentHeader.appendChild(headerText);
     
     // Add timestamp
     const timestampDiv = document.createElement('div');
     timestampDiv.className = 'timestamp';
     timestampDiv.textContent = new Date().toLocaleString();
-    summaryCard.appendChild(timestampDiv);
+    
+    assessmentCard.appendChild(assessmentHeader);
+    assessmentCard.appendChild(timestampDiv);
     
     // Summary content
-    const summaryDiv = document.createElement('div');
-    summaryDiv.className = 'decision-summary';
-    
     const summaryContent = document.createElement('div');
+    summaryContent.className = 'assessment-content';
     summaryContent.innerHTML = `
-      <p><strong>Total Decisions Analyzed:</strong> ${results.summary.total_decisions}</p>
-      <p><strong>Decisions Flagged for Excessive Pivoting:</strong> ${results.summary.flagged_count}</p>
-      <p><strong>Conflicts Identified:</strong> ${results.summary.conflict_count}</p>
-      <p><strong>Top Areas Affected by Pivots:</strong> ${results.summary.top_pivot_areas.join(', ')}</p>
-      <p><strong>Overall Assessment:</strong> ${results.summary.overall_assessment}</p>
+      <p class="overall-assessment">${results.summary.overall_assessment}</p>
+      <div class="pivot-areas">
+        <h3>Top Areas Affected:</h3>
+        <div class="tag-container">
+          ${results.summary.top_pivot_areas.map(area => 
+            `<span class="area-tag">${area}</span>`
+          ).join('')}
+        </div>
+      </div>
     `;
     
-    summaryDiv.appendChild(summaryContent);
-    summaryCard.appendChild(summaryDiv);
+    assessmentCard.appendChild(summaryContent);
+    container.appendChild(assessmentCard);
     
-    // Add the summary card to the container
-    container.appendChild(summaryCard);
-    
-    // Create conflicts card if there are conflicts
-    if (results.conflict_analysis && results.conflict_analysis.length > 0) {
-      const conflictsCard = document.createElement('div');
-      conflictsCard.className = 'card results-card';
+    // Create flagged decisions section
+    if (results.flagged_decisions && results.flagged_decisions.length > 0) {
+      const flaggedSection = document.createElement('div');
+      flaggedSection.className = 'card flagged-section';
       
-      const conflictsHeader = document.createElement('h2');
-      conflictsHeader.textContent = 'Conflicting Decisions';
-      conflictsCard.appendChild(conflictsHeader);
+      const flaggedHeader = document.createElement('div');
+      flaggedHeader.className = 'section-header';
       
-      // Create conflicts list
-      results.conflict_analysis.forEach(conflict => {
-        const conflictDiv = document.createElement('div');
-        conflictDiv.className = 'conflict-items';
+      const flaggedIcon = document.createElement('span');
+      flaggedIcon.className = 'material-icons';
+      flaggedIcon.textContent = 'warning';
+      flaggedHeader.appendChild(flaggedIcon);
+      
+      const flaggedTitle = document.createElement('h2');
+      flaggedTitle.textContent = 'Critical Pivot Decisions';
+      flaggedHeader.appendChild(flaggedTitle);
+      
+      flaggedSection.appendChild(flaggedHeader);
+      
+      // Create flagged decisions cards
+      const flaggedCardsContainer = document.createElement('div');
+      flaggedCardsContainer.className = 'flagged-cards-container';
+      
+      results.flagged_decisions.forEach(decision => {
+        const severityClass = decision.pivot_severity >= 0.8 ? 'severity-high' : 
+                             decision.pivot_severity >= 0.6 ? 'severity-medium' : 'severity-low';
         
-        const conflictContent = document.createElement('div');
-        conflictContent.innerHTML = `
-          <h3>Conflict #${conflict.conflict_id}</h3>
-          <p><strong>Conflicting Decisions:</strong> ${conflict.conflicting_decisions.join(', ')}</p>
-          <p><strong>Description:</strong> ${conflict.conflict_description}</p>
-          <h4>Recommendations:</h4>
+        const flaggedCard = document.createElement('div');
+        flaggedCard.className = `flagged-card ${severityClass}`;
+        
+        flaggedCard.innerHTML = `
+          <div class="flagged-card-header">
+            <div class="flagged-id">${decision.id}</div>
+            <div class="severity-indicator">Pivot: ${decision.pivot_severity.toFixed(2)}</div>
+          </div>
+          <div class="flagged-project">${decision.project}</div>
+          <div class="flagged-details">
+            <div class="detail-row"><span class="detail-label">Date:</span> ${decision.date}</div>
+            <div class="detail-row"><span class="detail-label">Sprint:</span> ${decision.sprint}</div>
+            <div class="detail-row"><span class="detail-label">By:</span> ${decision.changed_by}</div>
+          </div>
+          <div class="flagged-reason">
+            <div class="detail-label">Reason:</div>
+            <div>${decision.reason}</div>
+          </div>
+          <div class="flagged-impact">
+            <div class="detail-label">Impact:</div>
+            <div>${decision.impact}</div>
+          </div>
+          <div class="flagged-explanation">
+            <div class="detail-label">Why Flagged:</div>
+            <div>${decision.why_flagged}</div>
+          </div>
         `;
         
-        const recommendationsList = document.createElement('ul');
-        conflict.recommendations.forEach(rec => {
-          const li = document.createElement('li');
-          li.textContent = rec;
-          recommendationsList.appendChild(li);
-        });
-        
-        conflictContent.appendChild(recommendationsList);
-        conflictDiv.appendChild(conflictContent);
-        conflictsCard.appendChild(conflictDiv);
+        flaggedCardsContainer.appendChild(flaggedCard);
       });
       
-      // Add the conflicts card to the container
-      container.appendChild(conflictsCard);
+      flaggedSection.appendChild(flaggedCardsContainer);
+      container.appendChild(flaggedSection);
     }
     
-    // Create flagged decisions table
-    const flaggedDecisionsCard = document.createElement('div');
-    flaggedDecisionsCard.className = 'card results-card';
-    
-    const flaggedHeader = document.createElement('h2');
-    flaggedHeader.textContent = 'Flagged Decisions';
-    flaggedDecisionsCard.appendChild(flaggedHeader);
-    
-    // Create table
-    const table = document.createElement('table');
-    table.className = 'decision-table';
-    
-    // Table header
-    const thead = document.createElement('thead');
-    const headerRow = document.createElement('tr');
-    const headers = ['ID', 'Project', 'Date', 'Sprint', 'Changed By', 'Reason', 'Impact', 'Why Flagged', 'Severity'];
-    
-    headers.forEach(header => {
-      const th = document.createElement('th');
-      th.textContent = header;
-      headerRow.appendChild(th);
-    });
-    
-    thead.appendChild(headerRow);
-    table.appendChild(thead);
-    
-    // Table body
-    const tbody = document.createElement('tbody');
-    
-    results.flagged_decisions.forEach(decision => {
-      const row = document.createElement('tr');
-      row.className = 'flagged-decision';
+    // Create conflicts section
+    if (results.conflict_analysis && results.conflict_analysis.length > 0) {
+      const conflictsSection = document.createElement('div');
+      conflictsSection.className = 'card conflicts-section';
       
-      // Add cells
-      const cells = [
-        decision.id,
-        decision.project,
-        decision.date,
-        decision.sprint,
-        decision.changed_by,
-        decision.reason,
-        decision.impact,
-        decision.why_flagged,
-        decision.pivot_severity.toFixed(2)
-      ];
+      const conflictsHeader = document.createElement('div');
+      conflictsHeader.className = 'section-header';
       
-      cells.forEach(cellText => {
-        const td = document.createElement('td');
-        td.textContent = cellText;
-        row.appendChild(td);
+      const conflictIcon = document.createElement('span');
+      conflictIcon.className = 'material-icons';
+      conflictIcon.textContent = 'warning_amber';
+      conflictsHeader.appendChild(conflictIcon);
+      
+      const conflictTitle = document.createElement('h2');
+      conflictTitle.textContent = 'Decision Conflicts';
+      conflictsHeader.appendChild(conflictTitle);
+      
+      conflictsSection.appendChild(conflictsHeader);
+      
+      // Create conflicts accordion
+      const accordionContainer = document.createElement('div');
+      accordionContainer.className = 'accordion-container';
+      
+      results.conflict_analysis.forEach((conflict, index) => {
+        const accordionItem = document.createElement('div');
+        accordionItem.className = 'accordion-item';
+        
+        const accordionHeader = document.createElement('div');
+        accordionHeader.className = 'accordion-header';
+        accordionHeader.innerHTML = `
+          <div class="conflict-title">Conflict #${index + 1}: ${getConflictSummary(conflict.conflict_description)}</div>
+          <div class="conflict-ids">${conflict.conflicting_decisions.length} decisions</div>
+          <span class="material-icons accordion-icon">expand_more</span>
+        `;
+        
+        const accordionContent = document.createElement('div');
+        accordionContent.className = 'accordion-content';
+        accordionContent.innerHTML = `
+          <div class="conflict-description">${conflict.conflict_description}</div>
+          <div class="conflict-decisions">
+            <div class="detail-label">Decisions Involved:</div>
+            <div class="conflict-ids-list">${conflict.conflicting_decisions.join(', ')}</div>
+          </div>
+          <div class="recommendations">
+            <div class="detail-label">Recommendations:</div>
+            <ul class="recommendations-list">
+              ${conflict.recommendations.map(rec => `<li>${rec}</li>`).join('')}
+            </ul>
+          </div>
+        `;
+        
+        // Add click handler to toggle accordion
+        accordionHeader.addEventListener('click', () => {
+          accordionItem.classList.toggle('active');
+          const icon = accordionHeader.querySelector('.accordion-icon');
+          icon.textContent = accordionItem.classList.contains('active') ? 'expand_less' : 'expand_more';
+        });
+        
+        accordionItem.appendChild(accordionHeader);
+        accordionItem.appendChild(accordionContent);
+        accordionContainer.appendChild(accordionItem);
       });
       
-      tbody.appendChild(row);
-    });
+      conflictsSection.appendChild(accordionContainer);
+      container.appendChild(conflictsSection);
+    }
+  }
+  
+  // Helper function to create a stat card
+  function createStatCard(title, value, icon, statClass) {
+    const card = document.createElement('div');
+    card.className = `stat-card ${statClass}`;
     
-    table.appendChild(tbody);
-    flaggedDecisionsCard.appendChild(table);
+    const iconElement = document.createElement('span');
+    iconElement.className = 'material-icons stat-icon';
+    iconElement.textContent = icon;
     
-    // Add the flagged decisions card to the container
-    container.appendChild(flaggedDecisionsCard);
+    const valueElement = document.createElement('div');
+    valueElement.className = 'stat-value';
+    valueElement.textContent = value;
+    
+    const titleElement = document.createElement('div');
+    titleElement.className = 'stat-title';
+    titleElement.textContent = title;
+    
+    card.appendChild(iconElement);
+    card.appendChild(valueElement);
+    card.appendChild(titleElement);
+    
+    return card;
+  }
+  
+  // Helper function to extract a brief summary from conflict description
+  function getConflictSummary(description) {
+    const maxLength = 40;
+    if (description.length <= maxLength) return description;
+    
+    // Try to find a good breaking point
+    const breakPoint = description.indexOf(' ', maxLength - 10);
+    return breakPoint > 0 ? 
+      description.substring(0, breakPoint) + '...' : 
+      description.substring(0, maxLength) + '...';
   }
   
   // Function to display pivot analysis results
