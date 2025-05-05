@@ -26,10 +26,22 @@
       </div>
     </div>
     
-    <button id="analyze-btn" class="btn-primary">
-      <span class="material-icons">analytics</span>
-      Analyze Pivot
-    </button>
+    <div class="buttons-container">
+      <button id="analyze-btn" class="btn-primary">
+        <span class="material-icons">analytics</span>
+        Analyze Pivot
+      </button>
+      
+      <div class="or-divider">OR</div>
+      
+      <div class="file-upload-container">
+        <input type="file" id="csv-upload" accept=".csv" class="hidden" />
+        <button id="review-decisions-btn" class="btn-secondary">
+          <span class="material-icons">history</span>
+          Review Previous Decisions
+        </button>
+      </div>
+    </div>
     
     <div id="loading" class="loading-container hidden">
       <div class="spinner"></div>
@@ -37,6 +49,8 @@
     </div>
     
     <div id="results-container" class="results-container"></div>
+    
+    <div id="csv-results-container" class="results-container hidden"></div>
   </main>
   
   <footer>
