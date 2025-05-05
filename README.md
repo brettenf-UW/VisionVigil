@@ -6,7 +6,7 @@ VisionVigil is a web application that helps businesses and teams analyze strateg
 
 ## Demo
 
-[![Watch the demo](https://img.youtube.com/vi/VIDEO_ID/0.jpg)](https://github.com/brettenf-UW/VisionVigil/raw/main/VisionVigil%20Demo.mp4)
+🎥 [Click here to watch the demo](https://github.com/brettenf-UW/VisionVigil/raw/main/VisionVigil%20Demo.mp4)
 
 
 ## Quick Start Guide
