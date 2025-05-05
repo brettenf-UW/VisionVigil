@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quarterly Pivot Analyzer | VisionVigil</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header class="app-bar">
+    <h1>Quarterly Pivot Analyzer</h1>
+  </header>
+  
+  <main class="container">
+    <div class="card-container">
+      <div class="card">
+        <h2>Old Goals</h2>
+        <textarea id="old-goals" placeholder="Paste last quarter goals here..."></textarea>
+      </div>
+      
+      <div class="card">
+        <h2>New Goals</h2>
+        <textarea id="new-goals" placeholder="Paste this quarter goals here..."></textarea>
+      </div>
+    </div>
+    
+    <button id="analyze-btn" class="btn-primary">
+      <span class="material-icons">analytics</span>
+      Analyze Pivot
+    </button>
+    
+    <div id="loading" class="loading-container hidden">
+      <div class="spinner"></div>
+      <p>Analyzing...</p>
+    </div>
+    
+    <div id="results-container" class="results-container"></div>
+  </main>
+  
+  <footer>
+    <p>VisionVigil &copy; 2025 | Powered by OpenAI</p>
+  </footer>
+
+  <script type="module" src="main.js"></script>
+</body>
+</html>
