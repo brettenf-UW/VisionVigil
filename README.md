@@ -2,7 +2,8 @@
 
 VisionVigil is a web application that helps businesses and teams analyze strategic shifts between quarterly goals. It leverages OpenAI's GPT-4o-mini model to provide insights into the degree of pivot between sets of business objectives.
 
-![VisionVigil Screenshot](screenshot.png) *(Add a screenshot of your application here)*
+![image](https://github.com/user-attachments/assets/369875f1-773b-481d-a163-f03a0b9337f5)
+
 
 ## Quick Start Guide
 
