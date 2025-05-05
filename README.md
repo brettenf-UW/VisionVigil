@@ -4,6 +4,10 @@ VisionVigil is a web application that helps businesses and teams analyze strateg
 
 ![image](https://github.com/user-attachments/assets/369875f1-773b-481d-a163-f03a0b9337f5)
 
+<video width="640" height="360" controls>
+  <source src="https://github.com/brettenf-UW/VisionVigil/raw/main/VisionVigil%20Demo.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
 
 ## Quick Start Guide
 
