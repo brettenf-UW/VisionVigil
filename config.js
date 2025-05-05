@@ -1,0 +1,2 @@
+// IMPORTANT: Add this file to .gitignore to prevent exposing your API key
+export const OPENAI_API_KEY = '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';
