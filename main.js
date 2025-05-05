@@ -10,6 +10,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const loadingElement = document.getElementById('loading');
   const resultsContainer = document.getElementById('results-container');
   const csvResultsContainer = document.getElementById('csv-results-container');
+  const introModal = document.getElementById('intro-modal');
+  const closeModalButton = document.querySelector('.close-modal');
+  const startButton = document.getElementById('start-button');
   
   // History of analyses
   let analysisHistory = [];
@@ -31,6 +34,56 @@ document.addEventListener('DOMContentLoaded', () => {
     container.id = 'csv-results-container';
     container.className = 'results-container hidden';
     document.querySelector('main.container').appendChild(container);
+  }
+  
+  // Show intro modal on page load
+  // Check if this is the first visit
+  const hasVisitedBefore = localStorage.getItem('visionvigilVisited');
+  
+  if (!hasVisitedBefore) {
+    // Show the intro modal with a slight delay for better UX
+    setTimeout(() => {
+      introModal.classList.add('show');
+    }, 500);
+    
+    // Set visited flag in localStorage
+    localStorage.setItem('visionvigilVisited', 'true');
+  }
+  
+  // Modal event listeners
+  closeModalButton.addEventListener('click', () => {
+    introModal.classList.remove('show');
+  });
+  
+  startButton.addEventListener('click', () => {
+    introModal.classList.remove('show');
+  });
+  
+  // Close modal when clicking outside the content
+  introModal.addEventListener('click', (event) => {
+    if (event.target === introModal) {
+      introModal.classList.remove('show');
+    }
+  });
+  
+  // Add help button functionality to logo
+  const brandLogo = document.querySelector('.brand-logo');
+  brandLogo.style.cursor = 'pointer';
+  brandLogo.addEventListener('click', () => {
+    introModal.classList.add('show');
+  });
+  
+  // Add tooltip to brand logo
+  brandLogo.setAttribute('title', 'Click for help');
+  
+  // Initialize tooltips if available
+  if (typeof tippy !== 'undefined') {
+    tippy(brandLogo, {
+      content: 'Click for help',
+      placement: 'bottom',
+      arrow: true,
+      theme: 'light'
+    });
   }
   
   // Event Listeners

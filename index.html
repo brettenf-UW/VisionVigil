@@ -3,15 +3,81 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quarterly Pivot Analyzer | VisionVigil</title>
+  <title>VisionVigil | Strategic Pivot Analysis Tool</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" href="main.css">
 </head>
 <body>
   <header class="app-bar">
-    <h1>Quarterly Pivot Analyzer</h1>
+    <div class="main-title">
+      <span class="material-icons main-icon">insights</span>
+      <h1>VisionVigil</h1>
+    </div>
+    <div class="brand-logo">
+      <span class="material-icons brand-icon">help_outline</span>
+      <span class="brand-text">Help</span>
+    </div>
   </header>
+  
+  <div id="intro-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="material-icons modal-icon">insights</span>
+        <h2>Welcome to VisionVigil</h2>
+        <span class="close-modal material-icons">close</span>
+      </div>
+      
+      <div class="modal-body">
+        <div class="intro-section">
+          <h3>Analyze Goal Pivots</h3>
+          <div class="intro-card">
+            <div class="intro-image goal-analysis-img">
+              <div class="demo-goals-old"></div>
+              <div class="arrow-icon">
+                <span class="material-icons">compare_arrows</span>
+              </div>
+              <div class="demo-goals-new"></div>
+            </div>
+            <div class="intro-steps">
+              <ol>
+                <li>Paste last quarter's goals in the left box</li>
+                <li>Paste this quarter's goals in the right box</li>
+                <li>Click "Analyze Pivot" to see results</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+        
+        <div class="intro-section">
+          <h3>Review Decision History</h3>
+          <div class="intro-card">
+            <div class="intro-image decision-analysis-img">
+              <div class="demo-csv-file"></div>
+              <div class="arrow-icon">
+                <span class="material-icons">upload_file</span>
+              </div>
+              <div class="demo-analysis"></div>
+            </div>
+            <div class="intro-steps">
+              <ol>
+                <li>Prepare a CSV file with your decision history</li>
+                <li>Click "Review Previous Decisions"</li>
+                <li>Select your CSV file to see analysis</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+        
+        <div class="start-button-container">
+          <button id="start-button" class="btn-primary">
+            <span class="material-icons">play_arrow</span>
+            Get Started
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
   
   <main class="container">
     <div class="card-container">
